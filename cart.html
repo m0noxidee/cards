@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #eaeaea;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ffffff;
+        }
+
+        .cart-container {
+            margin-top: 20px;
+        }
+
+        .cart-list {
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 8px;
+            max-height: 300px;
+            overflow-y: scroll;
+        }
+
+        .cart-item {
+            padding: 10px;
+            border-bottom: 1px solid #444;
+        }
+
+        .checkout-btn {
+            display: block;
+            margin: 20px auto 0;
+            padding: 12px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+
+        .checkout-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Your Cart</h1>
+
+    <div class="cart-container">
+        <div class="cart-list" id="cartList">
+            <!-- Cart items will be loaded here -->
+        </div>
+        <button onclick="checkout()" class="checkout-btn">Checkout</button>
+    </div>
+
+    <script>
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const cartList = document.getElementById('cartList');
+
+        if (cart.length > 0) {
+            cart.forEach(card => {
+                const item = document.createElement('div');
+                item.className = 'cart-item';
+                item.innerHTML = `
+                    <p><strong>Name:</strong> ${card.Name}</p>
+                    <p><strong>Credit Card Number:</strong> ${card.Credit_Card_Number}</p>
+                    <p><strong>Expiry:</strong> ${card.Expiry_Date}</p>
+                    <p><strong>CVV:</strong> ${card.cvv}</p>
+                `;
+                cartList.appendChild(item);
+            });
+        } else {
+            cartList.innerHTML = '<p>Your cart is empty!</p>';
+        }
+
+        function checkout() {
+            const textData = cart.map(card => {
+                return `Name: ${card.Name}\nCredit Card Number: ${card.Credit_Card_Number}\nExpiry: ${card.Expiry_Date}\nCVV: ${card.cvv}\n\n`;
+            }).join('');
+            
+            const blob = new Blob([textData], { type: 'text/plain' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'cart_details.txt';
+            a.click();
+        }
+    </script>
+
+</body>
+</html>
