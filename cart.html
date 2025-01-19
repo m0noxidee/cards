@@ -30,6 +30,19 @@
             overflow-y: scroll;
         }
 
+        .cart-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .cart-list::-webkit-scrollbar-thumb {
+            background: #444;
+            border-radius: 4px;
+        }
+
+        .cart-list::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
         .cart-item {
             padding: 10px;
             border-bottom: 1px solid #444;
@@ -94,7 +107,11 @@
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
             a.download = 'cart_details.txt';
+
+            // Ensure the link works on iOS by appending it to the DOM temporarily
+            document.body.appendChild(a);
             a.click();
+            document.body.removeChild(a);
         }
     </script>
 
